@@ -12,4 +12,8 @@
       <ProjectReference Include="..\RecipeBook.Domain\RecipeBook.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="FluentValidation" Version="12.2.0" />
+    </ItemGroup>
+
 </Project>
