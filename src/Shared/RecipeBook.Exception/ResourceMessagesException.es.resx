@@ -30,4 +30,7 @@
     <data name="VALIDATION_EMAIL_INVALID" xml:space="preserve">
         <value>¡Ups! Contraseña no válida.</value>
     </data>
+    <data name="UNKNOWN_ERROR" xml:space="preserve">
+        <value>Error desconocido.</value>
+    </data>
 </root>
