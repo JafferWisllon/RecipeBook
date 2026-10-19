@@ -1,5 +1,6 @@
 using FluentValidation;
 using RecipeBook.Communication.Requests;
+using RecipeBook.Exception;
 
 namespace RecipeBook.Application.UseCases.User.Register;
 
@@ -7,12 +8,12 @@ public class RegisterUserAccountValidator : AbstractValidator<RequestRegisterUse
 {
     public RegisterUserAccountValidator()
     {
-        RuleFor(user => user.Name).NotEmpty().WithMessage("O nome não pode ser vazio");
-        RuleFor(user => user.Email).NotEmpty().WithMessage("O email não pode ser vazio");
-        RuleFor(user => user.Password).NotEmpty().WithMessage("A senha não pode ser vazia");
+        RuleFor(user => user.Name).NotEmpty().WithMessage(ResourceMessagesException.VALIDATION_NAME_REQUIRED);
+        RuleFor(user => user.Email).NotEmpty().WithMessage(ResourceMessagesException.VALIDATION_EMAIL_REQUIRED);
+        RuleFor(user => user.Password).NotEmpty().WithMessage(ResourceMessagesException.VALIDATION_PASSWORD_REQUIRED);
         When(user => string.IsNullOrWhiteSpace(user.Email) == false, () =>
         {
-            RuleFor(user => user.Email).EmailAddress().WithMessage("O email deve ser válido");
+            RuleFor(user => user.Email).EmailAddress().WithMessage(ResourceMessagesException.VALIDATION_EMAIL_INVALID);
         });
     }
 }
