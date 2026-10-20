@@ -1,3 +1,4 @@
+using Mapster;
 using RecipeBook.Communication.Requests;
 using RecipeBook.Exception.ExceptionsBase;
 
@@ -7,8 +8,14 @@ public class RegisterUserAccountUseCase
 {
     public void Execute(RequestRegisterUserAccountJson request)
     {
-        var validator = new RegisterUserAccountValidator();
+        ValidateAndThrowOnFailures(request);
 
+        var user = request.Adapt<Domain.Entities.User>();
+    }
+
+    private void ValidateAndThrowOnFailures(RequestRegisterUserAccountJson request)
+    {
+        var validator = new RegisterUserAccountValidator();
         var result = validator.Validate(request);
 
         if (result.IsValid is false)
