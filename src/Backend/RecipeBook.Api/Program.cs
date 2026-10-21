@@ -2,12 +2,17 @@ using System.Globalization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
 using RecipeBook.Api.Filters;
+using RecipeBook.Application;
+using RecipeBook.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure();
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
