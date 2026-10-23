@@ -28,7 +28,7 @@
         <value>¡Ups! Se requiere una contraseña.</value>
     </data>
     <data name="VALIDATION_EMAIL_INVALID" xml:space="preserve">
-        <value>¡Ups! Contraseña no válida.</value>
+        <value>¡Ups! El correo electrónico no válida.</value>
     </data>
     <data name="UNKNOWN_ERROR" xml:space="preserve">
         <value>Error desconocido.</value>
