@@ -28,7 +28,7 @@
         <value>Ops! A senha é obrigatória.</value>
     </data>
     <data name="VALIDATION_EMAIL_INVALID" xml:space="preserve">
-        <value>Oops! Senha inválida.</value>
+        <value>Oops! O email é inválido.</value>
     </data>
     <data name="UNKNOWN_ERROR" xml:space="preserve">
         <value>Error desconhecido.</value>
