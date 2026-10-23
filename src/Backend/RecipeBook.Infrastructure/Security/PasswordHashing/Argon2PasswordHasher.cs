@@ -21,7 +21,7 @@ internal sealed class Argon2PasswordHasher : IPasswordHasher
 
         var combinedBytes = new byte[hash.Length + salt.Length];
         
-        salt.CopyTo(hash);
+        salt.CopyTo(combinedBytes);
         hash.CopyTo(combinedBytes, index: salt.Length);
 
         return Convert.ToBase64String(combinedBytes);
