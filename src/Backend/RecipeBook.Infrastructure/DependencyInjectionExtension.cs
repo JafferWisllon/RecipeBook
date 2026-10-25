@@ -18,6 +18,7 @@ public static class DependencyInjectionExtension
         {
             service.AddScoped<IPasswordHasher, Argon2PasswordHasher>();
             service.AddScoped<IUserWriteOnlyRepository, UserRepository>();
+            service.AddScoped<IUserReadOnlyRepository, UserRepository>();
 
             service.AddDbContext<RecipeBookDbContext>(config =>
             {
