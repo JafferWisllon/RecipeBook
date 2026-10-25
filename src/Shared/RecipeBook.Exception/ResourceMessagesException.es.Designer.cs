@@ -74,5 +74,13 @@ namespace RecipeBook.Exception {
                 return ResourceManager.GetString("UNKNOWN_ERROR", resourceCulture);
             }
         }
+
+        public static string VALIDATION_EMAIL_ALREADY_EXISTS
+        {
+            get
+            {
+                return ResourceManager.GetString("VALIDATION_EMAIL_ALREADY_EXISTS", resourceCulture);
+            }
+        }
     }
 }
