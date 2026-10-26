@@ -1,3 +1,4 @@
+using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using RecipeBook.Domain.Security.PasswordHashing;
 using RecipeBook.Infrastructure.DataAccess;
 using RecipeBook.Infrastructure.DataAccess.Repositories;
 using RecipeBook.Infrastructure.Security.PasswordHashing;
+using System.Reflection;
 
 namespace RecipeBook.Infrastructure;
 
@@ -27,6 +29,16 @@ public static class DependencyInjectionExtension
             });
 
             service.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            service.AddFluentMigratorCore().ConfigureRunner(config => {
+                var connectionString = configuration.GetConnectionString("DbConnection")!;
+
+                config
+                .AddMySql5()
+                .WithGlobalConnectionString(connectionString)
+                .ScanIn(Assembly.Load("RecipeBook.Infrastructure"))
+                .For.All();
+            });
         }
     }
 }
