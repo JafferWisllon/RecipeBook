@@ -10,5 +10,8 @@
     <Project Path="src/Shared/RecipeBook.Communication/RecipeBook.Communication.csproj" />
     <Project Path="src/Shared/RecipeBook.Exception/RecipeBook.Exception.csproj" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/tests/">
+    <Project Path="tests/CommonTestUtilities/CommonTestUtilities.csproj" Id="fb82372d-ec3a-44eb-b140-2e06886cc188" />
+    <Project Path="tests/Validators.Tests/Validators.Tests.csproj" Id="661ee857-6ec6-49cb-9872-6f674a145018" />
+  </Folder>
 </Solution>
