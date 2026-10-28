@@ -8,9 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="Bogus" Version="35.6.5" />
+    <PackageReference Include="Moq" Version="4.21.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Backend\RecipeBook.Domain\RecipeBook.Domain.csproj" />
     <ProjectReference Include="..\..\src\Shared\RecipeBook.Communication\RecipeBook.Communication.csproj" />
   </ItemGroup>
 
