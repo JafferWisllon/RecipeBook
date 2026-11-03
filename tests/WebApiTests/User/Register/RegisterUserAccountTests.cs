@@ -3,9 +3,12 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using RecipeBook.Domain.Extensions;
 using RecipeBook.Exception;
 using Shouldly;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using WebApiTests.InlineData;
 
 namespace WebApiTests.User.Register;
 
@@ -35,11 +38,15 @@ public class RegisterUserAccountTests : IClassFixture<WebApplicationFactory<Prog
         responseData.RootElement.GetProperty("tokens").GetProperty("accessToken").GetString().ShouldBeEmpty();
     }
 
-    [Fact]
-    public async Task Validate_ShouldBeAnErrorResponse_WhenNameIsEmpty()
+    [Theory]
+    [ClassData(typeof(CultureInlineData))]
+    public async Task Validate_ShouldBeAnErrorResponse_WhenNameIsEmpty(string culture)
     {
         var request = RequestRegisterUserAccountJsonBuilder.Build();
         request.Name = string.Empty;
+
+        _httpClient.DefaultRequestHeaders.AcceptLanguage.Clear();
+        _httpClient.DefaultRequestHeaders.AcceptLanguage.ParseAdd(culture);
 
         var response = await _httpClient.PostAsJsonAsync(REQUEST_URI, request);
 
@@ -51,10 +58,12 @@ public class RegisterUserAccountTests : IClassFixture<WebApplicationFactory<Prog
 
         var errors = responseData.RootElement.GetProperty("errors").EnumerateArray();
 
+        var expectedErrorMessage = ResourceMessagesException.ResourceManager.GetString("VALIDATION_NAME_REQUIRED", new CultureInfo(culture));
+
         errors.ShouldSatisfyAllConditions(errorsList =>
         {
             errorsList.Count().ShouldBe(1);
-            errorsList.ShouldContain(error => error.GetString().IsNotEmpty() && error.GetString()!.Equals(ResourceMessagesException.VALIDATION_NAME_REQUIRED));
+            errorsList.ShouldContain(error => error.GetString().IsNotEmpty() && error.GetString()!.Equals(expectedErrorMessage));
         });
     }
 }
