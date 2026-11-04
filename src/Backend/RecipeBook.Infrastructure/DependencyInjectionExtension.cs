@@ -30,12 +30,15 @@ public static class DependencyInjectionExtension
 
             service.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            service.AddFluentMigratorCore().ConfigureRunner(config => {
-                var connectionString = configuration.GetConnectionString("DbConnection")!;
-
+            service.AddFluentMigratorCore().ConfigureRunner(config => 
+            {
                 config
                 .AddMySql5()
-                .WithGlobalConnectionString(connectionString)
+                .WithGlobalConnectionString(_ =>
+                {
+                    var connectionString = configuration.GetConnectionString("DbConnection")!;
+                    return connectionString;
+                })
                 .ScanIn(Assembly.Load("RecipeBook.Infrastructure"))
                 .For.All();
             });
