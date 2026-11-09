@@ -1,5 +1,4 @@
 ﻿using Moq;
-using RecipeBook.Domain.Repositories.User;
 using RecipeBook.Domain.Security.PasswordHashing;
 
 namespace CommonTestUtilities.Security;
