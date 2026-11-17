@@ -5,9 +5,11 @@ using Microsoft.Extensions.DependencyInjection;
 using RecipeBook.Domain.Repositories;
 using RecipeBook.Domain.Repositories.User;
 using RecipeBook.Domain.Security.PasswordHashing;
+using RecipeBook.Domain.Security.Tokens;
 using RecipeBook.Infrastructure.DataAccess;
 using RecipeBook.Infrastructure.DataAccess.Repositories;
 using RecipeBook.Infrastructure.Security.PasswordHashing;
+using RecipeBook.Infrastructure.Security.Tokens.Access;
 using System.Reflection;
 
 namespace RecipeBook.Infrastructure;
@@ -41,6 +43,14 @@ public static class DependencyInjectionExtension
                 })
                 .ScanIn(Assembly.Load("RecipeBook.Infrastructure"))
                 .For.All();
+            });
+
+            var expirationTimeInMinutes = configuration.GetValue<uint>("Jwt:ExpirationTimeMinutes");
+            var signingKey = configuration.GetValue<string>("Jwt:SigningKey")!;
+
+            service.AddScoped<IAccessTokenGenerator>(provider =>
+            {
+                return new JwtTokenHandler(expirationTimeInMinutes, signingKey);
             });
         }
     }
