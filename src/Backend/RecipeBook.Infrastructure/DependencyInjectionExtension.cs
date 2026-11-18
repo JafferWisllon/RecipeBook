@@ -20,17 +20,17 @@ public static class DependencyInjectionExtension
     {
         public void AddInfrastructure(IConfiguration configuration)
         {
+            service.AddRepositories();
+
+            service.AddTokensHandlers(configuration);
+
             service.AddScoped<IPasswordHasher, Argon2PasswordHasher>();
-            service.AddScoped<IUserWriteOnlyRepository, UserRepository>();
-            service.AddScoped<IUserReadOnlyRepository, UserRepository>();
 
             service.AddDbContext<RecipeBookDbContext>(config =>
             {
                 var connectionString = configuration.GetConnectionString("DbConnection")!;
                 config.UseMySQL(connectionString);
             });
-
-            service.AddScoped<IUnitOfWork, UnitOfWork>();
 
             service.AddFluentMigratorCore().ConfigureRunner(config => 
             {
@@ -44,7 +44,18 @@ public static class DependencyInjectionExtension
                 .ScanIn(Assembly.Load("RecipeBook.Infrastructure"))
                 .For.All();
             });
+        }
 
+        private void AddRepositories()
+        {
+            service.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            service.AddScoped<IUserWriteOnlyRepository, UserRepository>();
+            service.AddScoped<IUserReadOnlyRepository, UserRepository>();
+        }
+
+        private void AddTokensHandlers(IConfiguration configuration)
+        {
             var expirationTimeInMinutes = configuration.GetValue<uint>("Jwt:ExpirationTimeMinutes");
             var signingKey = configuration.GetValue<string>("Jwt:SigningKey")!;
 
