@@ -1,7 +1,3 @@
-using System.Globalization;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
@@ -9,10 +5,15 @@ using Microsoft.IdentityModel.Tokens;
 using RecipeBook.Api.Converters;
 using RecipeBook.Api.Filters;
 using RecipeBook.Application;
+using RecipeBook.Communication.Responses;
 using RecipeBook.Domain.Repositories.User;
+using RecipeBook.Exception;
 using RecipeBook.Infrastructure;
 using RecipeBook.Infrastructure.Migrations;
-using RecipeBook.Domain.Extensions;
+using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,23 +68,39 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             OnTokenValidated = async context =>
             {
-                var userId = context.Principal?.FindFirstValue(JwtRegisteredClaimNames.Sub)
+                var subject = context.Principal?.FindFirstValue(JwtRegisteredClaimNames.Sub)
                 ??
                 context.Principal?.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                if (userId.IsEmpty())
+                if (Guid.TryParse(subject, out var userId) == false)
                 {
-                    context.Fail("Invalid subject");
+                    context.Fail("Invalid token subject.");
 
                     return;
                 }
                 var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserReadOnlyRepository>();
 
-                var existUser = await userRepository.ExistActiveUserWithId(Guid.Parse(userId));
+                var existUser = await userRepository.ExistActiveUserWithId(userId);
                 if(existUser == false)
                 {
-                    context.Fail("Invalid subject");
+                    context.Fail("User not found or inactive");
                 }
+            },
+            OnChallenge = async context =>
+            {
+                context.HandleResponse();
+
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                context.Response.ContentType = "application/json";
+
+                var response = context.AuthenticateFailure switch
+                {
+                    null => new ResponseErrorJson(ResourceMessagesException.VALIDATION_ACCESS_TOKEN_REQUEST),
+                    SecurityTokenExpiredException => new ResponseErrorJson("Token expired", accessTokenExpired: true),
+                    _ => new ResponseErrorJson(ResourceMessagesException.VALIDATION_RESOURCE_ACCESS_DENIED)
+                };
+
+                await context.Response.WriteAsJsonAsync(response);
             }
         };
     });
