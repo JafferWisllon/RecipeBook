@@ -1,5 +1,7 @@
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Options;
@@ -7,8 +9,10 @@ using Microsoft.IdentityModel.Tokens;
 using RecipeBook.Api.Converters;
 using RecipeBook.Api.Filters;
 using RecipeBook.Application;
+using RecipeBook.Domain.Repositories.User;
 using RecipeBook.Infrastructure;
 using RecipeBook.Infrastructure.Migrations;
+using RecipeBook.Domain.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +61,30 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateLifetime = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signingKey)),
             ClockSkew = TimeSpan.Zero
+        };
+
+        jwtOptions.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = async context =>
+            {
+                var userId = context.Principal?.FindFirstValue(JwtRegisteredClaimNames.Sub)
+                ??
+                context.Principal?.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (userId.IsEmpty())
+                {
+                    context.Fail("Invalid subject");
+
+                    return;
+                }
+                var userRepository = context.HttpContext.RequestServices.GetRequiredService<IUserReadOnlyRepository>();
+
+                var existUser = await userRepository.ExistActiveUserWithId(Guid.Parse(userId));
+                if(existUser == false)
+                {
+                    context.Fail("Invalid subject");
+                }
+            }
         };
     });
 
