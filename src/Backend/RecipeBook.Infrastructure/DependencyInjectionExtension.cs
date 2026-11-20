@@ -2,12 +2,14 @@ using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RecipeBook.Domain.Identity;
 using RecipeBook.Domain.Repositories;
 using RecipeBook.Domain.Repositories.User;
 using RecipeBook.Domain.Security.PasswordHashing;
 using RecipeBook.Domain.Security.Tokens;
 using RecipeBook.Infrastructure.DataAccess;
 using RecipeBook.Infrastructure.DataAccess.Repositories;
+using RecipeBook.Infrastructure.Identity;
 using RecipeBook.Infrastructure.Security.PasswordHashing;
 using RecipeBook.Infrastructure.Security.Tokens.Access;
 using System.Reflection;
@@ -23,6 +25,8 @@ public static class DependencyInjectionExtension
             service.AddRepositories();
 
             service.AddTokensHandlers(configuration);
+
+            service.AddScoped<ILoggedUser, LoggedUser>();
 
             service.AddScoped<IPasswordHasher, Argon2PasswordHasher>();
 

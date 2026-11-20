@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using RecipeBook.Application.UseCases.User.Login.WithEmailAndPassword;
+using RecipeBook.Application.UseCases.User.Profile;
 using RecipeBook.Application.UseCases.User.Register;
 
 namespace RecipeBook.Application;
@@ -15,5 +16,6 @@ public static class DependencyInjectionExtension
     {
         service.AddScoped<IRegisterUserAccountUseCase, RegisterUserAccountUseCase>();
         service.AddScoped<ILoginWithEmailAndPasswordUseCase, LoginWithEmailAndPasswordUseCase>();
+        service.AddScoped<IGetUserProfileUseCase, GetUserProfileUseCase>();
     }
 }

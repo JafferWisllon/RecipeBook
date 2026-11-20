@@ -5,9 +5,11 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using RecipeBook.Api.Converters;
 using RecipeBook.Api.Filters;
+using RecipeBook.Api.Token;
 using RecipeBook.Application;
 using RecipeBook.Communication.Responses;
 using RecipeBook.Domain.Repositories.User;
+using RecipeBook.Domain.Security.Tokens;
 using RecipeBook.Exception;
 using RecipeBook.Infrastructure;
 using RecipeBook.Infrastructure.Migrations;
@@ -47,6 +49,9 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddScoped<IAccessTokenProvider, HttpContextTokenProvider>();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
