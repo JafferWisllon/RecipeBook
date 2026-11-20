@@ -1,0 +1,6 @@
+﻿namespace RecipeBook.Domain.Security.Tokens;
+
+public interface IAccessTokenProvider
+{
+    string GetToken();
+}
