@@ -56,6 +56,7 @@ public static class DependencyInjectionExtension
 
             service.AddScoped<IUserWriteOnlyRepository, UserRepository>();
             service.AddScoped<IUserReadOnlyRepository, UserRepository>();
+            service.AddScoped<IUserUpdateOnlyRepository, UserRepository>();
         }
 
         private void AddTokensHandlers(IConfiguration configuration)

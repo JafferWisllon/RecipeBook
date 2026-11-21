@@ -18,9 +18,9 @@ public class UpdateUserUseCase : IUpdateUserUseCase
         _userReadOnlyRepository = userReadOnlyRepository;
     }
 
-    public Task Execute(RequestUpdateUserJson request)
+    public async Task Execute(RequestUpdateUserJson request)
     {
-        throw new NotImplementedException();
+        var loggedUser = await _loggedUser.Get();
     }
 
     private async Task Validate(RequestUpdateUserJson request, Domain.Entities.User loggedUser)
