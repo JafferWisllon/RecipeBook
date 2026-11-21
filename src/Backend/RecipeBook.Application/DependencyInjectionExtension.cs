@@ -3,6 +3,7 @@ using RecipeBook.Application.UseCases.Login.WithEmailAndPassword;
 using RecipeBook.Application.UseCases.User.ChangePassword;
 using RecipeBook.Application.UseCases.User.Profile;
 using RecipeBook.Application.UseCases.User.Register;
+using RecipeBook.Application.UseCases.User.Update;
 
 namespace RecipeBook.Application;
 
@@ -19,5 +20,6 @@ public static class DependencyInjectionExtension
         service.AddScoped<ILoginWithEmailAndPasswordUseCase, LoginWithEmailAndPasswordUseCase>();
         service.AddScoped<IGetUserProfileUseCase, GetUserProfileUseCase>();
         service.AddScoped<IChangePasswordUseCase, ChangePasswordUseCase>();
+        service.AddScoped<IUpdateUserUseCase, UpdateUserUseCase>();
     }
 }
