@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
+using RecipeBook.Application.UseCases.Login.WithEmailAndPassword;
 using RecipeBook.Application.UseCases.User.ChangePassword;
-using RecipeBook.Application.UseCases.User.Login.WithEmailAndPassword;
 using RecipeBook.Application.UseCases.User.Profile;
 using RecipeBook.Application.UseCases.User.Register;
 

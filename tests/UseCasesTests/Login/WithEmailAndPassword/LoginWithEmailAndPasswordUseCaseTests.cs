@@ -2,7 +2,7 @@
 using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
 using CommonTestUtilities.Security;
-using RecipeBook.Application.UseCases.User.Login.WithEmailAndPassword;
+using RecipeBook.Application.UseCases.Login.WithEmailAndPassword;
 using RecipeBook.Domain.Extensions;
 using RecipeBook.Exception;
 using RecipeBook.Exception.ExceptionsBase;
