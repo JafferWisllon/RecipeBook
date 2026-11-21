@@ -144,4 +144,10 @@
   <data name="VALIDATION_RESOURCE_ACCESS_DENIED" xml:space="preserve">
     <value>¡Ups! No tienes acceso a este recurso.</value>
   </data>
+  <data name="VALIDATION_CURRENT_PASSWORD" xml:space="preserve">
+    <value>La contraseña actual informada es incorrecta.</value>
+  </data>
+  <data name="VALIDATION_PASSWORD_MIN_LENGTH" xml:space="preserve">
+    <value>¡Ups! La contraseña debe tener al menos 6 caracteres.</value>
+  </data>
 </root>
