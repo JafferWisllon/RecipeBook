@@ -2,6 +2,6 @@
 
 public interface IUserUpdateOnlyRepository
 {
-    void UpdateProdile(Entities.User user);
+    void UpdateProfile(Entities.User user);
     Task UpdatePassword(Guid userId, string passwordHash);
 }
