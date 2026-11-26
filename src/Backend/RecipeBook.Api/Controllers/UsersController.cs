@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RecipeBook.Application.UseCases.User.ChangePassword;
 using RecipeBook.Application.UseCases.User.Profile;
 using RecipeBook.Application.UseCases.User.Register;
+using RecipeBook.Application.UseCases.User.Update;
 using RecipeBook.Communication.Requests;
 using RecipeBook.Communication.Responses;
 
@@ -30,5 +32,31 @@ public class UsersController : ControllerBase
     {
         var result = await useCase.Execute();
         return Ok(result);
+    }
+
+    [HttpPut("profile")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateProfile(
+        [FromServices] IUpdateUserUseCase usecase,
+        [FromBody] RequestUpdateUserJson request)
+    {
+        await usecase.Execute(request);
+
+        return NoContent();
+    }
+
+    [HttpPut("password")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdatePassword(
+        [FromServices] IChangePasswordUseCase usecase,
+        [FromBody] RequestChangePasswordJson request)
+    {
+        await usecase.Execute(request);
+
+        return NoContent();
     }
 }

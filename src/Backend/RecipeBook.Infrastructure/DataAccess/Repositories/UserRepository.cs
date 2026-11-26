@@ -33,7 +33,7 @@ internal sealed class UserRepository : IUserWriteOnlyRepository, IUserReadOnlyRe
             .ExecuteUpdateAsync(setter => setter.SetProperty(user => user.Password, passwordHash));
     }
 
-    public void UpdateProdile(User user)
+    public void UpdateProfile(User user)
     {
         _dbContext.Users.Attach(user);
 
